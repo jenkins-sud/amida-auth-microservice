@@ -1,0 +1,38 @@
+version: '2'
+
+services:
+  amida-auth-microservice:
+    build:
+      context: .
+    image: ${DTR_PREFIX}${DTR_ORG}/amida-auth-microservice:${SOURCE_BUILD_NUMBER}
+
+    # Expose ports [HOST:CONTAINER}
+    ports:
+      - "4000"
+
+    # Set environment variables from this file
+    env_file:
+      - .env
+
+    # Overwrite any env var defined in .env file (if required)
+    environment:
+      - AUTH_SERVICE_PG_DB=api
+      - AUTH_SERVICE_PG_PORT=5432
+      - AUTH_SERVICE_PG_HOST=postgres
+      - AUTH_SERVICE_PG_USER=api
+      - AUTH_SERVICE_PG_PASSWORD=boilerplate
+      - DEBUG=amida-api-boilerplate:*
+
+    # Link to containers in another service.
+    # Links also express dependency between services in the same way as depends_on,
+    # so they determine the order of service startup.
+    links:
+      - postgres
+
+  postgres:
+    image: "postgres:9.4.11"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=api
+      - POSTGRES_PASSWORD=boilerplate

@@ -1,0 +1,6 @@
+.env
+.dockerignore
+.eslintignore
+.istanbul.yml
+.snyk
+.yarnrc
